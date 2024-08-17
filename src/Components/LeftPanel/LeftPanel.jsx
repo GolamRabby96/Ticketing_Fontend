@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react'
 import '../../App.css'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { GrTicket } from "react-icons/gr";
+import { PiTicketDuotone } from "react-icons/pi";
+import { DiGoogleAnalytics } from "react-icons/di";
+import { HiMiniUserGroup } from "react-icons/hi2";
+import { MdGroupAdd } from "react-icons/md";
+import { IoMdLogOut } from "react-icons/io";
 
 
 export const LeftPanel = () => {
@@ -23,7 +29,6 @@ export const LeftPanel = () => {
                 SetModaratorFlag(true);
             }
         }
-        console.log(checkUser.userRole);
     }, [])
 
     return (
@@ -38,31 +43,32 @@ export const LeftPanel = () => {
                     </li>
                     <li className="sidebar-item">
                         <Link to="/all-tickets" className="sidebar-link">
-                            <i className="fa-regular fa-snowflake"></i>&nbsp;
+                            <GrTicket />&nbsp;
                             Tickets
                         </Link>
                     </li>
                     <li className="sidebar-item">
                         <Link to="/create-ticket" className="sidebar-link">
-                            <i className="fa-solid fa-ticket"></i>&nbsp;
+                            <PiTicketDuotone />&nbsp;
                             Create Tickets
                         </Link>
                     </li>
                     <li className="sidebar-item">
                         <Link to="#" className="sidebar-link">
-                            <i className="fa-regular fa-chart-bar"></i>&nbsp;
+                            <DiGoogleAnalytics />&nbsp;
                             Analysis
                         </Link>
                     </li>
                     {!flag && !ModFlag && <li className="sidebar-item">
                         <Link to="/team-member" className="sidebar-link">
-                            <i className="fa-solid fa-people-roof"></i>&nbsp;
+
+                            <HiMiniUserGroup />&nbsp;
                             Team Member
                         </Link>
                     </li>}
                     {!flag && !ModFlag && <li className="sidebar-item">
                         <Link to="/add-member" className="sidebar-link">
-                            <i className="fa-solid fa-share-nodes pe-2"></i>&nbsp;
+                            < MdGroupAdd />&nbsp;
                             Add Member
                         </Link>
                     </li>}
@@ -70,7 +76,7 @@ export const LeftPanel = () => {
                     <hr />
                     <li onClick={handleLogout} className="sidebar-item mt-5">
                         <Link to="" className="sidebar-link bg-danger">
-                            <i className="fa-solid fa-share-nodes pe-2"></i>&nbsp;
+                            <IoMdLogOut />&nbsp;
                             Log Out
                         </Link>
                     </li>

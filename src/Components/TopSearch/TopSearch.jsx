@@ -11,7 +11,7 @@ export const TopSearch = () => {
         let scearchContent = e.target.value;
         console.log(scearchContent.length)
         const messageApi = async () => {
-            const response = await fetch(`http://localhost:5000/ticket/${scearchContent}`);
+            const response = await fetch(`https://ticketing-backend-tq82.onrender.com/ticket/${scearchContent}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             SetItem(data.data);
@@ -45,32 +45,3 @@ export const TopSearch = () => {
         </div>
     )
 }
-
-
-
-
-// {
-//     searchItem.length > 0 &&
-//     searchItem.map((ticket) => {
-
-//         return (
-//             <div onClick={handleSearchClear} className="col-md-12 mt-5">
-//                 {/* <Link to={`/open-ticket/${ticket._id}`}>
-//                                         <div className="all-tickets">
-//                                             <div className='ticket-box'>
-//                                                 <p className='opening-time'><span className='text-success'>opening time</span> : {ticket.createdAt}</p>
-//                                                 <h2><span>#{randomnumber} </span><span className='middle-bar'>||</span> {ticket.ticket_name}</h2>
-//                                                 <p className='opening-time'> <span className='text-danger'>Created By </span>: {ticket.createdBy}</p>
-//                                                 <p className='text-danger'>issues : {ticket.ticket_issue}</p>
-//                                             </div>
-//                                             <div className='ticket-zone'>
-//                                                 <p className='zone-name'>{ticket.ticket_zone} zone</p>
-//                                             </div>
-//                                         </div>
-//                                         <p className='searchBottomBar'>Top section is your Search result</p>
-//                                     </Link> */}
-//                 <TicketMap ticket={ticket} />
-//             </div>
-//         )
-//     })
-// }

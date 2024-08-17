@@ -8,7 +8,7 @@ export const ClosedTicket = () => {
 
     useEffect(() => {
         const ticketApi = async () => {
-            const response = await fetch('http://localhost:5000/allTickets');
+            const response = await fetch('https://ticketing-backend-tq82.onrender.com/allTickets');
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             SetTicket(data.data);

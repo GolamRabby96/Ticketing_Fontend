@@ -48,6 +48,21 @@ i {
 }
 
 /* Layout skeleton */
+.Loading-button {
+  width: 300px;
+  padding-top: 150px;
+  margin: auto;
+}
+
+.Loading-button-OpenTicket {
+  width: 300px;
+  padding-top: 50px;
+  margin: auto;
+}
+
+.falseSidePanelCheck {
+  background-color: red;
+}
 
 .wrapper {
   align-items: stretch;
@@ -217,7 +232,7 @@ a.sidebar-link:hover {
 }
 
 .ticket-issue p>span {
-  color: rgb(255, 0, 76);
+  color: rgb(255, 255, 255);
 }
 
 .ticket-message {
@@ -282,8 +297,8 @@ a.sidebar-link:hover {
 
 .clicked-user {
   float: right;
-  color: rgb(235, 3, 92);
-  border-bottom: 0.5px solid rebeccapurple;
+  color: rgb(19, 3, 235);
+  border-bottom: 0.2px solid rgb(131, 7, 255);
 }
 
 /* --------------- */
@@ -555,7 +570,7 @@ label {
 .r-menu {
   position: absolute;
   top: 100px;
-  left: -30px;
+  left: -36px;
   background-color: rgba(1, 255, 149, 0.63);
   border-radius: 50px 0px 0px 50px;
   cursor: pointer;
@@ -646,7 +661,7 @@ label {
 }
 
 .login-top {
-  margin-top: 2rem;
+  padding-top: 2rem;
   height: 100vh;
 }
 
@@ -787,5 +802,52 @@ label {
     min-width: 0 px;
     transition: all 0.35s ease-in-out;
     box-shadow: 0 0 35px 0 rgba(49, 57, 66, 0.5);
+  }
+
+  .login-top {
+    padding-top: 2rem;
+    height: 100vh;
+  }
+
+
+  .login-section {
+    width: 80%;
+    margin: auto;
+    background-color: rgba(193, 220, 221, 0.911);
+    padding: 20px 20px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px #a7aca785;
+    transition: all 2s ease-in-out;
+  }
+
+}
+
+@media (max-width:500px) {
+  .content {
+    width: auto;
+  }
+
+  #sidebar {
+    display: none;
+    max-width: 0 px;
+    min-width: 0 px;
+    transition: all 0.35s ease-in-out;
+    box-shadow: 0 0 35px 0 rgba(49, 57, 66, 0.5);
+  }
+
+  .login-top {
+    padding-top: 2rem;
+    height: 100vh;
+  }
+
+
+  .login-section {
+    width: 95%;
+    margin: auto;
+    background-color: rgba(193, 220, 221, 0.911);
+    padding: 10px 10px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 10px #a7aca785;
+    transition: all 2s ease-in-out;
   }
 }

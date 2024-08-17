@@ -6,13 +6,12 @@ export const SidePanel = ({ ticket = [] }) => {
         <div className='r-side-panel-margin'>
             {
                 ticket.map((ticket) => {
-                    let randomnumber = Math.floor((Math.random() * 1000000) + 1);
                     return (
                         <div className="col-md-12 mt-4">
                             <Link to={`/open-ticket/${ticket._id}`}>
                                 <div className="all-tickets r-all-tickets">
                                     <div className='r-ticket-box'>
-                                        <h2><span>#214569 </span><span className='middle-bar'>||
+                                        <h2><span># {ticket.ticket_id} </span><span className='middle-bar'>||
                                         </span> {ticket.ticket_name} </h2>
                                         <p className='text-danger'>issues : {ticket.ticket_issue}
                                             <span className={`${ticket.ticket_status}Status extensionCSS`}>{ticket.ticket_status}</span>

@@ -14,7 +14,7 @@ export const AddMember = () => {
     const handleAddUserSubmit = (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:5000/addUser', {
+        fetch('https://ticketing-backend-tq82.onrender.com/addUser', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
@@ -55,7 +55,7 @@ export const AddMember = () => {
                         <option value="Regional Team">Regional Team</option>
                         <option value="NOC">NOC</option>
                         <option value="CCD">CCD</option>
-                        <option value="Radion" >Radio</option>
+                        <option value="Radio" >Radio</option>
                         <option value="Fiber" >Fiber</option>
                     </select>
                 </div>

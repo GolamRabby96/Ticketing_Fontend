@@ -1,22 +1,28 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { TopSearch } from '../TopSearch/TopSearch'
 import JoditEditor from 'jodit-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { TicketMap } from '../LiveTickets/TicketMap';
 import { SidePanel } from './SidePanel';
 import { Message } from './Message';
+import { GiTensionSnowflake } from "react-icons/gi";
+import { BiStreetView } from "react-icons/bi";
 
 export const OpenTicket = () => {
+    const userdata = JSON.parse(localStorage.getItem("user") || "[]");
+    const navigate = useNavigate();
     const [flag, SetTeamFlag] = useState(false);
     const [ModFlag, SetModaratorFlag] = useState(false);
     const { id } = useParams();
     const [um, SetUm] = useState([]);
     const [ticketMessage, GetMessage] = useState("")
     const [rightBar, SetRightBar] = useState(false);
-    const userdata = JSON.parse(localStorage.getItem("user") || "[]");
     const [ticket, SetTicket] = useState([]);
-    console.log(ticket);
+    const [isOpen, setTicketMessage] = useState(true);
+
+    console.log(isOpen);
     const [idTicket, SetIdTicket] = useState([]);
+    console.log('............23...........', idTicket);
     const [checkState, SetStateUpdate] = useState(false);
     const [AllTicketFlag, SetALLTicketFlag] = useState(true);
     const [filterData, SetFilterData] = useState({
@@ -28,7 +34,6 @@ export const OpenTicket = () => {
         CT: false
     });
 
-    console.log(filterData)
 
     const handleFilterData = (e) => {
 
@@ -47,14 +52,14 @@ export const OpenTicket = () => {
     const handleApi = async (totalData) => {
         if (totalData.ticket_zone == 'ALL') {
             console.log('clicked all');
-            const response = await fetch('http://localhost:5000/allTickets');
+            const response = await fetch('https://ticketing-backend-tq82.onrender.com/allTickets');
             const data = await response.json();
             const filterTicket = data.data.filter(t => t.ticket_status == totalData.ticket_status);
             SetTicket(filterTicket);
         }
         if (totalData.ticket_zone != 'ALL') {
             console.log('clicked zone');
-            const response = await fetch(`http://localhost:5000/ticketZone/${totalData.ticket_zone}`);
+            const response = await fetch(`https://ticketing-backend-tq82.onrender.com/ticketZone/${totalData.ticket_zone}`);
             const data = await response.json();
             const filterTicket = data.data.filter(t => t.ticket_status == totalData.ticket_status);
             SetTicket(filterTicket);
@@ -70,7 +75,7 @@ export const OpenTicket = () => {
         }
 
 
-        fetch('http://localhost:5000/cm', {
+        fetch('https://ticketing-backend-tq82.onrender.com/cm', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(messageData),
@@ -99,21 +104,29 @@ export const OpenTicket = () => {
             }
         }
         const ticketApi = async () => {
-            const response = await fetch('http://localhost:5000/allTickets');
+            const response = await fetch('https://ticketing-backend-tq82.onrender.com/allTickets');
             const data = await response.json();
             const filterTicket = data.data.filter(t => t.ticket_status == 'open');
             SetTicket(filterTicket);
             SetALLTicketFlag(false);
+
         }
 
         const ticketById = async () => {
-            const response = await fetch(`http://localhost:5000/singleTicket/${id}`);
+            // const response = await fetch(`https://ticketing-backend-tq82.onrender.com/singleTicket/${id}`);
+            const response = await fetch(`https://ticketing-backend-tq82.onrender.com/singleTicket/${id}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             SetIdTicket(data.data[0]);
+            if (data.data[0].ticket_status == 'closed') {
+                setTicketMessage(false);
+            } else if (data.data[0].ticket_status == 'open') {
+                setTicketMessage(true);
+            }
+            updateStatus()
         }
         const messageApi = async () => {
-            const response = await fetch(`http://localhost:5000/cm/${id}`);
+            const response = await fetch(`https://ticketing-backend-tq82.onrender.com/cm/${id}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             SetUm(data.data);
@@ -126,6 +139,31 @@ export const OpenTicket = () => {
     }, [id, checkState]);
 
 
+    const updateStatus = async () => {
+        fetch(`https://ticketing-backend-tq82.onrender.com/ticketStatus/${id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify([userdata.userName]),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                SetIdTicket(data.data[0])
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    }
+
+
+    const handleClosedTicket = async () => {
+        const response = await fetch(`https://ticketing-backend-tq82.onrender.com/ticketClosed/${id}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        navigate('/all-tickets');
+    }
+
+
+
     return (
         <div className={`main ${idTicket.ticket_priority}bgColor`}>
             <TopSearch />
@@ -133,22 +171,32 @@ export const OpenTicket = () => {
                 <div className='container-fluid'>
                     <div className="row">
                         <div className="col-md-12">
-                            <div className='ticket-name'>
-                                <h2>Ticket id: # {idTicket.ticket_id} - {idTicket?.ticket_name} <span className={`${idTicket.ticket_priority}extensionMain normalextensionMainEDITCSS`}>Ticket Priority: {idTicket.ticket_priority}</span> </h2>
-                            </div>
+                            {idTicket.ticket_id ? <div className='ticket-name'>
+                                <h2>Ticket id: # {idTicket.ticket_id} - {idTicket?.ticket_name} </h2>
+                            </div> : <div className='Loading-button-OpenTicket'>
+                                <button class="btn btn-danger" type="button" disabled>
+                                    <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;
+                                    <span role="status">Loading . . . .</span>
+                                </button>
+                            </div>}
                         </div>
-                        <div className="col-md-12 mb-2">
-                            <div className='ticket-info '>
-                                <p className='ticket-info-float'><span>_Site Adress</span> : {idTicket?.address}</p>
-                                <p className='ticket-info-float'><span>_Phone</span> : {idTicket?.phone_number}</p>
-                                <p className='ticket-info-float'><span>_Email</span> : golamrabbynwu@gmail.com</p>
+                        {
+                            idTicket.ticket_id && <div className="col-md-12 mb-2">
+                                <div className='ticket-info '>
+                                    <p className='ticket-info-float'><span>_Site Adress</span> : {idTicket?.address}</p>
+                                    <p className='ticket-info-float'><span>_Phone</span> : {idTicket?.phone_number}</p>
+                                    <p className='ticket-info-float'><span>_Email</span> : {idTicket?.ticket_email}</p>
+                                </div>
                             </div>
-                        </div>
+                        }
                         <div className="col-md-12 mb-5">
                             <div className='ticket-issue mb-2 mt-2'>
-                                <p><span>#Issue : </span> {idTicket?.ticket_issue}</p>
+                                <p className=''>issues : {idTicket.ticket_issue} &nbsp;&nbsp;&nbsp; <span className={`${idTicket.ticket_priority}MainPage extensionMainCSS`}> {idTicket.ticket_priority}</span>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <span className={`${idTicket.ticket_status}Status extensionMainCSS`}> {idTicket.ticket_status}</span></p>
+
                             </div>
-                            <div className='ticket-message'>
+                            {isOpen && <div className='ticket-message'>
                                 <form onSubmit={handleSubmit}>
                                     <div className="form-floating">
                                         <textarea onBlur={(e) => GetMessage(e.target.value)} name="ticketMessage" required className="form-control form-message" placeholder="Leave a comment here" id="floatingTextarea2" />
@@ -156,11 +204,11 @@ export const OpenTicket = () => {
 
                                         <div class="mt-3 form-underButton">
                                             <button class="btn btn-primary" type="submit">Update Status</button>
-                                            <button class="btn btn-danger" type="button">Closed Ticket</button>
+                                            <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Closed Ticket</button>
                                         </div>
                                     </div>
                                 </form>
-                            </div>
+                            </div>}
                         </div>
 
                         {/* ------------------------------------message section-------------------------------------------------------- */}
@@ -171,10 +219,9 @@ export const OpenTicket = () => {
 
                         <div className='col-md-12 mt-5'>
                             <div className='clicked-list'>
-                                <p className='clicked-user' >Ataur Rahman , </p>
-                                <p className='clicked-user'> Al Mamun , </p>
-                                <p className='clicked-user'> Firoz , </p>
-                                <p className='clicked-user'> Watched ---- </p>
+                                &nbsp;<p className='clicked-user'> <BiStreetView /></p>&nbsp;
+                                {idTicket.watched?.map(m => <p className='clicked-user' >&nbsp;{m}, &nbsp;</p>)}
+                                &nbsp;<p className='clicked-user'> <BiStreetView /></p>
                             </div>
                         </div>
                     </div>
@@ -184,7 +231,7 @@ export const OpenTicket = () => {
             <div className='right-bar-main'>
                 <div className={`${rightBar}` + 'check'}>
                     <div onClick={() => SetRightBar(!rightBar)} className="r-menu">
-                        <i class="fa-solid fa-bars "></i>
+                        <GiTensionSnowflake />
                     </div>
                     <div className='r-main'>
                         <div className="r-all mt-5">
@@ -222,6 +269,23 @@ export const OpenTicket = () => {
 
             </div>
             {/* -------------------------------Right Toggle bar end------------------------------------------ */}
+            {/* <!-- Modal --> */}
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure ?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Once closed, No option to re-open this ticket.
+                        </div>
+                        <div class="modal-footer">
+                            <button onClick={handleClosedTicket} type="button" class="btn btn-danger" data-bs-dismiss="modal">Ticket Closed</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div >
     )
 }

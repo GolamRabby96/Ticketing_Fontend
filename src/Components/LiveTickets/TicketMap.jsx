@@ -17,10 +17,10 @@ export const TicketMap = ({ ticket = [], handleSearchClear }) => {
                                             <h2>
                                                 <span>#{ticket.ticket_id} </span>
                                                 <span className='middle-bar'>||</span> {ticket.ticket_name} &nbsp;
-                                                <span className={`${ticket.ticket_priority}MainPage extensionMainCSS`}> {ticket.ticket_priority}</span>
-                                                &nbsp;
-                                                <span className={`${ticket.ticket_status}Status extensionMainCSS`}> {ticket.ticket_status}</span></h2>
-                                            <p className='text-danger'>issues : {ticket.ticket_issue}</p>
+                                            </h2>
+                                            <p className='text-danger'>issues : {ticket.ticket_issue} &nbsp;&nbsp;&nbsp; <span className={`${ticket.ticket_priority}MainPage extensionMainCSS`}> {ticket.ticket_priority}</span>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <span className={`${ticket.ticket_status}Status extensionMainCSS`}> {ticket.ticket_status}</span></p>
                                         </div>
                                         <div className="ticketInformation">
                                             <p className='opening-time'><span className='text-success'>opening time</span> :{new Date(ticket.createdAt).toLocaleString()}</p>

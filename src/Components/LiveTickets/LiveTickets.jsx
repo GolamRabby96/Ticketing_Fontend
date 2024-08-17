@@ -10,7 +10,7 @@ export const LiveTickets = () => {
         OT: true,
         CT: false
     });
-    console.log(radioFlag);
+
     const handleClick = (e) => {
         if (e.target.value === 'open') {
             SetFlags({ OT: true, CT: false })
@@ -19,7 +19,7 @@ export const LiveTickets = () => {
             SetFlags({ OT: false, CT: true })
         }
         const ticketApi = async () => {
-            const response = await fetch('http://localhost:5000/allTickets');
+            const response = await fetch('https://ticketing-backend-tq82.onrender.com/allTickets');
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             const filterTicket = data.data.filter(t => t.ticket_status == e.target.value);
@@ -41,7 +41,7 @@ export const LiveTickets = () => {
             }
         }
         const ticketApi = async () => {
-            const response = await fetch('http://localhost:5000/allTickets');
+            const response = await fetch('https://ticketing-backend-tq82.onrender.com/allTickets');
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             const filterTicket = data.data.filter(t => t.ticket_status == 'open');
@@ -68,8 +68,18 @@ export const LiveTickets = () => {
                         <label for="Closed">Closed Tickets</label>
                     </div>
                 </div>}
-                <TicketMap ticket={ticket} />
+                {ticket.length >= 1 && <TicketMap ticket={ticket} />}
+
             </div>
+            {ticket.length <= 0 &&
+                <div className='Loading-button'>
+                    <button class="btn btn-danger" type="button" disabled>
+                        <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;
+                        <span role="status">Loading . . . .</span>
+                    </button>
+                </div>
+            }
+
         </div>
     )
 }

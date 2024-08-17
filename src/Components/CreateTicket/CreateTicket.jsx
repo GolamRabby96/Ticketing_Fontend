@@ -14,7 +14,7 @@ export const CreateTicket = () => {
     const handleAddTicket = (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:5000/addTicket', {
+        fetch('https://ticketing-backend-tq82.onrender.com/addTicket', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(collectData),
@@ -32,7 +32,7 @@ export const CreateTicket = () => {
     }
     setTimeout(function () {
         SetInfoMessage("");
-    }, 6000);
+    }, 10000);
     return (
         <div className='container'>
             <form onSubmit={handleAddTicket} className="row g-3 create-ticket-row">
@@ -77,7 +77,7 @@ export const CreateTicket = () => {
                         <option value=''>Choose...</option>
                         <option value='Dhaka'>Dhaka</option>
                         <option value='Khulna'>Khulna</option>
-                        <option value='Chitagone'>Chitagone</option>
+                        <option value='Chattogram'>Chattogram</option>
                     </select>
                 </div>
                 <div className="col-md-4">
